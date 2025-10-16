@@ -4,34 +4,25 @@ object WordProvider {
 
     private val wordsByCategory = mapOf(
         "Animales" to listOf(
-            // Original 15
             "Perro", "Gato", "Elefante", "León", "Tigre", "Jirafa", "Mono", "Cebra", "Oso", "Caballo",
-            "Vaca", "Pato", "Gallina", "Cerdo", "Oveja",
-            // New 10
-            "Rinoceronte", "Hipopótamo", "Cocodrilo", "Serpiente", "Loro", "Águila", "Delfín", "Ballena",
-            "Canguro", "Koala"
+            "Vaca", "Pato", "Gallina", "Cerdo", "Oveja", "Rinoceronte", "Hipopótamo", "Cocodrilo",
+            "Serpiente", "Loro", "Águila", "Delfín", "Ballena", "Canguro", "Koala"
         ),
         "Películas" to listOf(
-            // Original 15
             "Titanic", "Avatar", "Star Wars", "Jurassic Park", "El Padrino", "Forrest Gump", "Pulp Fiction",
             "El Señor de los Anillos", "Harry Potter", "La La Land", "Matrix", "El Rey León", "Coco",
-            "Toy Story", "Buscando a Nemo",
-            // New 10
-            "Gladiador", "Interestelar", "El Origen", "El Caballero de la Noche", "Parásitos", "Joker",
-            "Volver al Futuro", "E.T.", "Indiana Jones", "Los Cazafantasmas"
+            "Toy Story", "Buscando a Nemo", "Gladiador", "Interestelar", "El Origen", "Rocky",
+            "Volver al Futuro", "E.T.", "Spider-Man", "Shrek", "Los Vengadores", "Mi Villano Favorito"
         ),
         "Profesiones" to listOf(
-            // Original 15
             "Médico", "Ingeniero", "Abogado", "Profesor", "Científico", "Artista", "Bombero", "Policía",
             "Chef", "Periodista", "Arquitecto", "Enfermero", "Músico", "Actor", "Deportista",
-            // New 10
             "Psicólogo", "Veterinario", "Contador", "Diseñador Gráfico", "Traductor", "Electricista",
             "Mecánico", "Piloto", "Escritor", "Fotógrafo"
         )
     )
 
-    // This is now only used for single-serving random words if needed, but not for the main game loop.
-    private val usedWords = mutableMapOf<String, MutableSet<String>>()
+     private val usedWords = mutableMapOf<String, MutableSet<String>>()
 
     fun getRandomWord(category: String): String? {
         val words = wordsByCategory[category] ?: return null

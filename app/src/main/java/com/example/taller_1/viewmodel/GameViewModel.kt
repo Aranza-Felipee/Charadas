@@ -163,6 +163,21 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    fun pauseGame() {
+        timerJob?.cancel()
+        _gameState.update { it.copy(isPaused = true) }
+    }
+
+    fun resumeGame() {
+        _gameState.update { it.copy(isPaused = false) }
+        startTimer()
+    }
+
+    fun endGame() {
+        timerJob?.cancel()
+        _gameState.update { it.copy(isGameOver = true) }
+    }
+
     fun resetGame() {
         _gameState.value = GameState()
     }
@@ -178,6 +193,7 @@ data class GameState(
     val timeLeft: Int = 60,
     val isGameOver: Boolean = false,
     val isTurnOver: Boolean = false,
+    val isPaused: Boolean = false,
     val currentTeamIndex: Int = 0
 )
 

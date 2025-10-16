@@ -1,5 +1,6 @@
 package com.example.taller_1.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -14,17 +15,23 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,17 +53,27 @@ fun GameScreen(navController: NavController, viewModel: GameViewModel) {
     if (gameState.isTurnOver) {
         TurnResultScreen(viewModel)
     } else {
-        ActiveGameScreen(viewModel)
+        ActiveGameScreen(navController, viewModel)
     }
 }
 
 @Composable
-fun ActiveGameScreen(viewModel: GameViewModel) {
+fun ActiveGameScreen(navController: NavController, viewModel: GameViewModel) {
     val gameState by viewModel.gameState.collectAsState()
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         val buttonSize = maxWidth / 4
         val currentTeam = gameState.teams.getOrNull(gameState.currentTeamIndex)
+        
+        // Pause Button
+        IconButton(
+            onClick = { viewModel.pauseGame() },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+        ) {
+            Icon(Icons.Default.Pause, contentDescription = "Pausar Juego", modifier = Modifier.size(36.dp))
+        }
 
         Column(
             modifier = Modifier
@@ -98,7 +115,35 @@ fun ActiveGameScreen(viewModel: GameViewModel) {
         ) {
             Text("Acertaste", fontSize = 20.sp)
         }
+
+        if (gameState.isPaused) {
+            PauseDialog(viewModel = viewModel)
+        }
     }
+}
+
+@Composable
+fun PauseDialog(viewModel: GameViewModel) {
+    AlertDialog(
+        onDismissRequest = { viewModel.resumeGame() }, // Resume if user clicks outside
+        title = { Text("Juego Pausado") },
+        text = { Text("¿Qué deseas hacer?") },
+        confirmButton = {
+            Button(
+                onClick = { viewModel.resumeGame() })
+            {
+                Text("Reanudar")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = { viewModel.endGame() },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            ) {
+                Text("Terminar Juego")
+            }
+        }
+    )
 }
 
 @Composable
