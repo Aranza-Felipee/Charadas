@@ -37,6 +37,9 @@ import com.example.taller_1.navigation.Screen
 import com.example.taller_1.ui.components.AnimatedBackground
 import com.example.taller_1.ui.screens.PlayerSelectionScreen
 import com.example.taller_1.ui.screens.RoundSelectionScreen
+import com.example.taller_1.ui.screens.CategorySelectionScreen
+import com.example.taller_1.ui.screens.GameScreen
+import com.example.taller_1.ui.screens.ResultsScreen
 import com.example.taller_1.ui.theme.Orange
 import com.example.taller_1.ui.theme.Taller_1Theme
 import com.example.taller_1.ui.theme.Yellow
@@ -73,11 +76,17 @@ fun AppNavigation() {
             }
             composable(Screen.RoundSelection.route) {
                 RoundSelectionScreen(navController = navController) { roundCount ->
-                    // TODO: Navigate to the game screen
-                    navController.navigate(Screen.Home.route) { // For now, go back to home
-                        popUpTo(Screen.Home.route) { inclusive = true }
-                    }
+                    navController.navigate(Screen.CategorySelection.route)
                 }
+            }
+            composable(Screen.CategorySelection.route) {
+                CategorySelectionScreen(navController = navController)
+            }
+            composable(Screen.Game.route) {
+                GameScreen(navController = navController)
+            }
+            composable(Screen.Results.route) {
+                ResultsScreen(navController = navController)
             }
         }
     }
