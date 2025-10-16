@@ -2,11 +2,17 @@ package com.example.taller_1.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,7 +42,7 @@ fun ResultsScreen(navController: NavController, viewModel: GameViewModel) {
         Spacer(modifier = Modifier.height(32.dp))
 
         if (winner != null) {
-            Text("Ganador: Equipo ${winner.id}", fontSize = 28.sp)
+            Text("Ganador: Jugador ${winner.id}", fontSize = 28.sp)
         } else {
             Text("¡Es un empate!", fontSize = 28.sp)
         }
@@ -44,18 +50,29 @@ fun ResultsScreen(navController: NavController, viewModel: GameViewModel) {
         Spacer(modifier = Modifier.height(24.dp))
         Text("Resultados Finales", fontSize = 24.sp)
         gameState.teams.forEach {
-            Text("Equipo ${it.id}: ${it.roundsWon} Rondas Ganadas, ${it.totalScore} Puntos Totales")
+            Text("Jugador ${it.id}: ${it.roundsWon} Rondas Ganadas, ${it.totalScore} Puntos Totales")
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = {
-            viewModel.resetGame()
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Home.route) { inclusive = true }
+        Button(
+            onClick = {
+                viewModel.resetGame()
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Home.route) { inclusive = true }
+                }
+            },
+            modifier = Modifier.size(width = 220.dp, height = 70.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Filled.Replay,
+                    contentDescription = "Jugar de Nuevo",
+                    modifier = Modifier.size(36.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Jugar de Nuevo", fontSize = 22.sp)
             }
-        }) {
-            Text("Jugar de Nuevo")
         }
     }
 }
