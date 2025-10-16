@@ -11,16 +11,29 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.taller_1.navigation.Screen
+import com.example.taller_1.viewmodel.GameViewModel
 
 @Composable
-fun GameScreen(navController: NavController) {
+fun GameScreen(navController: NavController, viewModel: GameViewModel) {
+    val gameState by viewModel.gameState.collectAsState()
+
+    if (gameState.isGameOver) {
+        navController.navigate(Screen.Results.route) { 
+            popUpTo(Screen.Home.route)
+        }
+    }
+
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         val buttonSize = maxWidth / 4
+        val currentTeam = gameState.teams.getOrNull(gameState.currentTeamIndex)
 
         Column(
             modifier = Modifier
@@ -33,18 +46,18 @@ fun GameScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Jugador: 1", fontSize = 20.sp)
-                Text("Tiempo: 60", fontSize = 20.sp)
+                Text("Equipo: ${currentTeam?.id ?: ""}", fontSize = 20.sp)
+                Text("Puntaje: ${currentTeam?.score ?: ""}", fontSize = 20.sp)
+                Text("Tiempo: ${gameState.timeLeft}", fontSize = 20.sp)
             }
 
-            Text("Palabra a Adivinar", fontSize = 32.sp)
+            Text(gameState.currentWord, fontSize = 32.sp)
 
-            // Empty row to push buttons to the bottom via Arrangement.SpaceBetween
-            Row {}
+            Row { }
         }
 
         Button(
-            onClick = { /* TODO: Handle pass */ },
+            onClick = { viewModel.onSkip() },
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(16.dp)
@@ -54,7 +67,7 @@ fun GameScreen(navController: NavController) {
         }
 
         Button(
-            onClick = { /* TODO: Handle correct guess */ },
+            onClick = { viewModel.onCorrect() },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)

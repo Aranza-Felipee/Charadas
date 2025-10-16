@@ -12,10 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.charadas.data.WordProvider
 import com.example.taller_1.navigation.Screen
+import com.example.taller_1.viewmodel.GameViewModel
 
 @Composable
-fun CategorySelectionScreen(navController: NavController) {
+fun CategorySelectionScreen(navController: NavController, viewModel: GameViewModel) {
+    val categories = WordProvider.getCategories()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -23,16 +27,14 @@ fun CategorySelectionScreen(navController: NavController) {
     ) {
         Text("Selecciona una categoría")
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.Game.route) }) {
-            Text("Animales")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { navController.navigate(Screen.Game.route) }) {
-            Text("Películas")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { navController.navigate(Screen.Game.route) }) {
-            Text("Profesiones")
+        categories.forEach { category ->
+            Button(onClick = {
+                viewModel.selectCategory(category)
+                navController.navigate(Screen.Game.route)
+            }) {
+                Text(category)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }

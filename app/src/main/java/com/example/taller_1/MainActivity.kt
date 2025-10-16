@@ -3,6 +3,7 @@ package com.example.taller_1
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,8 +44,11 @@ import com.example.taller_1.ui.screens.ResultsScreen
 import com.example.taller_1.ui.theme.Orange
 import com.example.taller_1.ui.theme.Taller_1Theme
 import com.example.taller_1.ui.theme.Yellow
+import com.example.taller_1.viewmodel.GameViewModel
 
 class MainActivity : ComponentActivity() {
+    private val gameViewModel by viewModels<GameViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -53,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation()
+                    AppNavigation(gameViewModel)
                 }
             }
         }
@@ -61,7 +65,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(viewModel: GameViewModel) {
     val navController = rememberNavController()
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedBackground()
@@ -71,22 +75,25 @@ fun AppNavigation() {
             }
             composable(Screen.PlayerSelection.route) {
                 PlayerSelectionScreen(navController = navController) { playerCount ->
+                    viewModel.setGameData(playerCount, 0) // round count will be set in the next screen
                     navController.navigate(Screen.RoundSelection.route)
                 }
             }
             composable(Screen.RoundSelection.route) {
                 RoundSelectionScreen(navController = navController) { roundCount ->
+                    val currentState = viewModel.gameState.value
+                    viewModel.setGameData(currentState.teams.size, roundCount)
                     navController.navigate(Screen.CategorySelection.route)
                 }
             }
             composable(Screen.CategorySelection.route) {
-                CategorySelectionScreen(navController = navController)
+                CategorySelectionScreen(navController = navController, viewModel = viewModel)
             }
             composable(Screen.Game.route) {
-                GameScreen(navController = navController)
+                GameScreen(navController = navController, viewModel = viewModel)
             }
             composable(Screen.Results.route) {
-                ResultsScreen(navController = navController)
+                ResultsScreen(navController = navController, viewModel = viewModel)
             }
         }
     }
