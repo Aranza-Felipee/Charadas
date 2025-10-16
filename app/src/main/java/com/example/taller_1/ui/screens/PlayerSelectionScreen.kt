@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,16 +41,11 @@ fun PlayerSelectionScreen(navController: NavController, onPlayerSelected: (Int) 
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                imageVector = Icons.Default.Star, // Using a star icon as a placeholder for the trophy
-                contentDescription = "Trophy Icon",
-                modifier = Modifier.size(80.dp),
-                tint = LightYellow
-            )
+            Text("Seleccion de jugadores", fontSize = 32.sp, color = Color.White)
             Spacer(modifier = Modifier.height(32.dp))
             Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 PlayerCard(playerCount = 2, color = LightBlue) { onPlayerSelected(2) }
                 PlayerCard(playerCount = 3, color = LightGreen) { onPlayerSelected(3) }

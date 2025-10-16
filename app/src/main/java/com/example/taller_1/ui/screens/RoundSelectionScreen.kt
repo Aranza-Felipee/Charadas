@@ -37,10 +37,11 @@ fun RoundSelectionScreen(navController: NavController, onRoundSelected: (Int) ->
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Select Tournament",
+                text = "Seleccione las rondas",
                 fontSize = 32.sp,
                 color = Color.White,
                 modifier = Modifier.padding(vertical = 24.dp)
@@ -50,9 +51,9 @@ fun RoundSelectionScreen(navController: NavController, onRoundSelected: (Int) ->
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                RoundCard(roundCount = 1, color = Pink, onRoundSelected = onRoundSelected)
+                RoundCard(roundCount = 2, color = Blue, onRoundSelected = onRoundSelected)
                 RoundCard(roundCount = 3, color = Pink, onRoundSelected = onRoundSelected)
-                RoundCard(roundCount = 5, color = Blue, onRoundSelected = onRoundSelected)
-                RoundCard(roundCount = 7, color = Pink, onRoundSelected = onRoundSelected)
             }
         }
         IconButton(
@@ -88,7 +89,7 @@ private fun RoundCard(roundCount: Int, color: Color, onRoundSelected: (Int) -> U
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "$roundCount Rounds",
+                text = "$roundCount rondas",
                 fontSize = 16.sp,
                 color = Color.White
             )

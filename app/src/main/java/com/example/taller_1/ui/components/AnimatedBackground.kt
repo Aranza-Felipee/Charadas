@@ -15,11 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.random.Random
 
 private const val NUM_SHAPES = 20
@@ -65,31 +68,48 @@ fun AnimatedBackground() {
 
 private fun DrawScope.drawShape(shape: Shape, rotation: Float) {
     val center = Offset(x = size.width * shape.x, y = size.height * shape.y)
-    when (shape.type) {
-        ShapeType.CIRCLE -> {
-            drawCircle(color = shape.color, radius = shape.sizePx / 2, center = center)
-        }
-        ShapeType.SQUARE -> {
-            rotate(degrees = rotation, pivot = center) {
+    rotate(degrees = rotation, pivot = center) {
+        when (shape.type) {
+            ShapeType.TRIANGLE -> {
+                val path = Path().apply {
+                    val radius = shape.sizePx / 2
+                    moveTo(center.x, center.y - radius)
+                    lineTo(center.x - radius, center.y + radius / 2)
+                    lineTo(center.x + radius, center.y + radius / 2)
+                    close()
+                }
+                drawPath(path = path, color = shape.color)
+            }
+            ShapeType.SQUARE -> {
                 drawRect(
                     color = shape.color,
                     topLeft = Offset(center.x - shape.sizePx / 2, center.y - shape.sizePx / 2),
                     size = Size(shape.sizePx, shape.sizePx)
                 )
             }
-        }
-        ShapeType.RECTANGLE -> {
-            drawRect(
-                color = shape.color,
-                topLeft = Offset(center.x - (shape.sizePx * 1.5f) / 2, center.y - shape.sizePx / 2),
-                size = Size(shape.sizePx * 1.5f, shape.sizePx)
-            )
+            ShapeType.HEXAGON -> {
+                val path = Path().apply {
+                    val radius = shape.sizePx / 2
+                    for (i in 0..5) {
+                        val angle = (60 * i - 90) * (Math.PI / 180).toFloat()
+                        val x = center.x + radius * cos(angle)
+                        val y = center.y + radius * sin(angle)
+                        if (i == 0) {
+                            moveTo(x, y)
+                        } else {
+                            lineTo(x, y)
+                        }
+                    }
+                    close()
+                }
+                drawPath(path = path, color = shape.color)
+            }
         }
     }
 }
 
 private enum class ShapeType {
-    CIRCLE, SQUARE, RECTANGLE
+    TRIANGLE, SQUARE, HEXAGON
 }
 
 private data class Shape(
