@@ -72,14 +72,18 @@ fun ActiveGameScreen(navController: NavController, viewModel: GameViewModel) {
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text("Jugador: ${currentTeam?.id ?: ""}", fontSize = 20.sp)
-                Text("Puntaje de Ronda: ${currentTeam?.currentRoundScore ?: ""}", fontSize = 20.sp)
-                Text("Tiempo: ${gameState.timeLeft}", fontSize = 20.sp)
+                Text("Jugador: ${currentTeam?.id ?: ""}", fontSize = 20.sp, color = Color.White)
+                Spacer(modifier = Modifier.width(16.dp))
+                Text("Puntaje de Ronda: ${currentTeam?.currentRoundScore ?: ""}", fontSize = 20.sp, color = Color.White)
             }
 
-            Text(gameState.currentWord, fontSize = 32.sp)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(gameState.timeLeft.toString(), fontSize = 48.sp, color = Color.White)
+                Spacer(modifier = Modifier.height(32.dp)) // Increased spacer
+                Text(gameState.currentWord, fontSize = 32.sp, color = Color.White)
+            }
 
             Row { }
         }
@@ -91,7 +95,7 @@ fun ActiveGameScreen(navController: NavController, viewModel: GameViewModel) {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp) // Adjust padding as needed
         ) {
-            Icon(Icons.Default.Pause, contentDescription = "Pausar Juego", modifier = Modifier.size(48.dp)) // Increased size
+            Icon(Icons.Default.Pause, contentDescription = "Pausar Juego", modifier = Modifier.size(48.dp), tint = Color.White) // Increased size and added tint
         }
 
         Button(
@@ -159,16 +163,16 @@ fun TurnResultScreen(viewModel: GameViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Fin del Turno", fontSize = 32.sp)
+            Text("Fin del Turno", fontSize = 32.sp, color = Color.White)
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Jugador ${currentTeam?.id}", fontSize = 24.sp)
-            Text("Puntos en este turno: ${currentTeam?.currentRoundScore}", fontSize = 20.sp)
+            Text("Jugador ${currentTeam?.id}", fontSize = 24.sp, color = Color.White)
+            Text("Puntos en este turno: ${currentTeam?.currentRoundScore}", fontSize = 20.sp, color = Color.White)
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Palabras Acertadas:", fontSize = 20.sp)
+            Text("Palabras Acertadas:", fontSize = 20.sp, color = Color.White)
             LazyRow(modifier = Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(currentTeam?.guessedWordsInTurn ?: emptyList()) { word ->
-                    Text(word, fontSize = 18.sp)
+                    Text(word, fontSize = 18.sp, color = Color.White)
                 }
             }
         }
@@ -182,9 +186,9 @@ fun TurnResultScreen(viewModel: GameViewModel) {
             colors = ButtonDefaults.buttonColors(containerColor = Yellow)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Siguiente Jugador", fontSize = 20.sp)
+                Text("Siguiente Jugador", fontSize = 20.sp, color = Color.Black)
                 Spacer(modifier = Modifier.width(8.dp))
-                Icon(Icons.Default.ArrowForward, contentDescription = "Siguiente")
+                Icon(Icons.Default.ArrowForward, contentDescription = "Siguiente", tint = Color.Black)
             }
         }
     }
